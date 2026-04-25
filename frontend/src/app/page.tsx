@@ -23,6 +23,7 @@ export default function Home() {
 
   const fetchData = async () => {
     const res = await axios.get("http://localhost:8080/building");
+
     setBuilding(res.data);
   };
 
@@ -75,7 +76,13 @@ export default function Home() {
   // ================= EFFECT =================
 
   useEffect(() => {
-    fetchData();
+    fetchData(); // initial load
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000); // every 3 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   if (!building)
@@ -257,7 +264,9 @@ export default function Home() {
             </p>
 
             <p className="text-gray-300">
-              Temp: <span className="text-white">{room.temperature}°C</span>
+              Temp: <span className="text-white">
+                {room.temperature?.toFixed(1)}°C
+              </span>
             </p>
 
             <div className="mt-2">{getStatusUI(room)}</div>
@@ -285,7 +294,9 @@ export default function Home() {
             <h3 className="font-semibold text-lg">{room.type}</h3>
 
             <p className="text-gray-300">
-              Temp: <span className="text-white">{room.temperature}°C</span>
+              Temp: <span className="text-white">
+                {room.temperature?.toFixed(1)}°C
+              </span>
             </p>
 
             <div className="mt-2">{getStatusUI(room)}</div>
